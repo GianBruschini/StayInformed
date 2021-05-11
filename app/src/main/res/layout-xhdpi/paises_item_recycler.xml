@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+
+    >
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView1"
+        android:layout_width="140dp"
+        android:layout_height="150dp"
+        app:cardElevation="10dp"
+        app:cardCornerRadius="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp">
+
+        <ImageView
+            android:id="@+id/imageFlag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/argentina"
+
+            >
+        </ImageView>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="180dp"
+        android:layout_height="160dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/cardView1"
+
+
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/nombreText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:text="Australia"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                />
+
+
+
+            <TextView
+                android:id="@+id/casosActivosText"
+                android:layout_below="@id/nombreText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:text="Active cases: 100"
+                android:fontFamily="@font/montserrat_light"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/casosConfirmadosText"
+                android:layout_below="@id/casosActivosText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/montserrat_light"
+                android:text="Confirmed cases: 100"
+                android:textSize="12sp"
+
+                />
+
+            <TextView
+                android:id="@+id/casosMuertesText"
+                android:layout_below="@id/casosConfirmadosText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:text="Deaths: 100"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/montserrat_light"
+                android:textSize="12sp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/nuevosCasosText"
+                android:layout_below="@id/casosMuertesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:layout_marginTop="5dp"
+                android:text="New cases: 100"
+                android:fontFamily="@font/montserrat_light"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textSize="12sp"
+                />
+
+            <TextView
+                android:id="@+id/nuevasMuertesText"
+                android:layout_below="@id/nuevosCasosText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:layout_marginTop="5dp"
+                android:text="New deaths: 100"
+                android:fontFamily="@font/montserrat_light"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textSize="12sp"
+                />
+
+
+
+            <TextView
+                android:id="@+id/image_delete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/ic_baseline_delete_24"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/image_share"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_baseline_share_24"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>

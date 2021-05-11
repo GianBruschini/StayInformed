@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WelcomeActivity">
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/sliderPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.viewpager.widget.ViewPager>
+
+
+    <TextView
+        android:id="@+id/texto1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consulta datos en tiempo real "
+        android:lineSpacingExtra="-4dp"
+        android:textColor="@color/white"
+        android:layout_marginTop="370dp"
+        android:layout_marginLeft="40dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:textSize="30sp"
+        />
+
+    <TextView
+        android:id="@+id/texto2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/texto1"
+        android:text="Mantente informado"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="40dp"
+        android:fontFamily="@font/montserrat_light"
+        android:textSize="18sp"
+        >
+
+    </TextView>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:onClick="goToMainActivity"
+        android:text="Start"
+        android:fontFamily="@font/montserrat_light"
+        android:textColor="#0D0A0A"
+        android:background="@drawable/button_start_design"
+        android:layout_above="@id/dotsLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="1dp"
+        >
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+
+
+    <LinearLayout
+        android:id="@+id/dotsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignBottom="@id/sliderPager">
+
+    </LinearLayout>
+
+</RelativeLayout>
