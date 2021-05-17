@@ -56,13 +56,17 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import Adaptadores.PaisesFavAdapter;
-import Clases.ByCountry;
-import Clases.Countries;
-import Clases.CustomSpinnerAdapter;
-import Clases.PaisesFavoritosData;
-import Clases.Summary;
+import Adapters.PaisesFavAdapter;
+import ProjectClasses.Covid19ApiSingleton;
+import ProjectClasses.DisplayAlertDialog;
+import covid19apiClasses.ByCountry;
+import covid19apiClasses.Countries;
+import CoronaLmaoNinjaApiClasses.CustomSpinnerAdapter;
+import ProjectClasses.PaisesFavoritosData;
+import covid19apiClasses.Summary;
 import Interfaces.CovidApi;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -73,12 +77,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.OnItemClickListener {
-    private Spinner spinner_buscar_paises;
-    private TextView casosActivosTxt;
-    private TextView casosConfirmadosTxt;
-    private TextView casosMuertesTxt;
-    private TextView nuevosCasosTxt;
-    private TextView nuevasMuertesTxt;
+    @BindView(R.id.buscar_paises_spinner) Spinner spinner_buscar_paises;
+    @BindView(R.id.casosActivosText) TextView casosActivosTxt;
+    @BindView(R.id.casosConfirmadosText) TextView casosConfirmadosTxt;
+    @BindView(R.id.casosMuertesText) TextView casosMuertesTxt;
+    @BindView(R.id.nuevosCasosText) TextView nuevosCasosTxt;
+    @BindView(R.id.nuevasMuertesText) TextView nuevasMuertesTxt;
+    @BindView(R.id.card) CardView card;
+    @BindView(R.id.recycler_buscar_paises) RecyclerView recyclerView;
+    @BindView(R.id.pais) TextView pais;
+    private static final CovidApi recipeServiceCovid19Api = Covid19ApiSingleton.getService();
+    DisplayAlertDialog displayAlertDialog;
     private String casosConfirmados;
     private String casosActivos;
     private String muertes;
@@ -88,12 +97,8 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
     private String keyPaises;
     private String key;
     private List<PaisesFavoritosData> mlist = new ArrayList<>();
-    private RecyclerView recyclerView;
     private PaisesFavAdapter adapter;
-    private CardView card;
-    private TextView pais;
     ProgressDialog progressDialog;
-    int cacheSize = 10 * 1024 * 1024; // 10 MiB
     private InterstitialAd mInterstitialAd;
     private int clicks;
     private int dismissShare;
@@ -103,20 +108,45 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initializeInterstitial();
+        executeMethodsAccordingInternetConnection();
+    }
+
+    private void executeMethodsAccordingInternetConnection() {
         if(checkInternetConnection()){
-            //showAlertDialog();
             progressDialog = ProgressDialog.show(this, "Wait...", "Loading data...",true);
             progressDialog.show();
             checkearSharedPreference();
             cargarFavoritos();
-            getValues();
+            initializeUI();
             getCountries();
         }else{
-            showAlertDialogExit();
+            showAlertDialogOnResponse();
+        }
+    }
+
+    public void showAlertDialogOnResponse() {
+        if(!checkInternetConnection()){
+            new AlertDialog.Builder(this)
+                    .setTitle("Internet connection")
+                    .setMessage("You must have an internet connection to be able to see the statistics of the other countries")
+                    .setPositiveButton(R.string.Continuar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton(R.string.Salir, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.this.finish();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
 
     }
+
 
     private void initializeInterstitial() {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -133,9 +163,9 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
     }
 
     private void createInterstisialAd(AdRequest adRequest) {
-
+        //original ca-app-pub-4185358034958198/9153246696
         //Prueba ca-app-pub-3940256099942544/1033173712
-        InterstitialAd.load(this,"ca-app-pub-4185358034958198/9153246696", adRequest, new InterstitialAdLoadCallback() {
+        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                 // The mInterstitialAd reference will be null until
@@ -145,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
                 mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
                     @Override
                     public void onAdDismissedFullScreenContent() {
-                        // Called when fullscreen content is dismissed.
                         if(dismissShare==1){
                             Log.d("TAG", "The ad was dismissed.");
                             Intent myIntent = new Intent (Intent.ACTION_SEND);
@@ -161,26 +190,17 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
                             myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
                             startActivity(Intent.createChooser(myIntent,"Share"));
                             dismissShare=0;
-
                         }
-
                         createPersonalizedAd();
-
-
-
                     }
 
                     @Override
                     public void onAdFailedToShowFullScreenContent(AdError adError) {
-                        // Called when fullscreen content failed to show.
                         Log.d("TAG", "The ad failed to show.");
                     }
 
                     @Override
                     public void onAdShowedFullScreenContent() {
-                        // Called when fullscreen content is shown.
-                        // Make sure to set your reference to null so you don't
-                        // show it a second time.
                         mInterstitialAd = null;
                         Log.d("TAG", "The ad was shown.");
                     }
@@ -189,81 +209,14 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                // Handle the error
                 Log.i("---AdMob", loadAdError.getMessage());
                 mInterstitialAd = null;
             }
         });
 
     }
-
-    private void showAlertDialogExit() {
-        new AlertDialog.Builder(this)
-                .setTitle("Internet connection")
-                .setMessage("No internet connection detected")
-
-                .setNegativeButton(R.string.Salir, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.this.finish();
-
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
-
-    private void showAlertDialog() {
-        if(!checkInternetConnection()){
-            new AlertDialog.Builder(this)
-                    .setTitle("Internet connection")
-                    .setMessage("No internet connection detected")
-
-                    .setNegativeButton(R.string.Salir, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.this.finish();
-
-                        }
-                    })
-
-                    .setNegativeButton(R.string.Continuar, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-
-                        }
-                    })
-
-
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        }
-    }
-
-    private void showAlertDialogOnResponse() {
-        if(!checkInternetConnection()){
-            new AlertDialog.Builder(this)
-                    .setTitle("Internet connection")
-                    .setMessage("You must have an internet connection to be able to see the statistics of the other countries")
-                    .setPositiveButton(R.string.Continuar, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-
-                        }
-                    })
-                    .setNegativeButton(R.string.Salir, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.this.finish();
-
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        }
-
-    }
-
-
     private boolean checkInternetConnection() {
-            boolean connected = false;
+            boolean connected;
             ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
             if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                     connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
@@ -277,20 +230,15 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
 
         }
 
-
     private void cargarFavoritos() {
-
 
             DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("PaisesFavoritos").child(key);
             database.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                     for (DataSnapshot dataSnapshot: snapshot.getChildren()){
                         PaisesFavoritosData paisesFavoritosData = dataSnapshot.getValue(PaisesFavoritosData.class);
                         getMyFlag(paisesFavoritosData.getNombre(),paisesFavoritosData);
-
-
                     }
                     generarRecycler();
                 }
@@ -300,34 +248,9 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
 
                 }
             });
-
-
-
-
-
     }
 
-    private void showAlertDialogFavoritos() {
-        new AlertDialog.Builder(this)
-                .setTitle("Internet connection")
-                .setMessage("You must have an internet connection to be able to add a country to your favorites list")
-                .setPositiveButton(R.string.Continuar, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
 
-                    }
-                })
-                .setNegativeButton(R.string.Salir, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.this.finish();
-
-                    }
-                })
-
-
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
 
 
     private void getMyFlag(String nombre, PaisesFavoritosData paisesFavoritosData) {
@@ -379,7 +302,6 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
     }
 
     private void generarRecycler() {
-        recyclerView = findViewById(R.id.recycler_buscar_paises);
         adapter = new PaisesFavAdapter(MainActivity.this,mlist);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this,GridLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -397,10 +319,8 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
                 removeItem(position);
 
             }
-
             @Override
             public void onShareClick(int position) {
-
                 Intent myIntent = new Intent (Intent.ACTION_SEND);
                 myIntent.setType("text/plain");
                 String shareBody = "Country: " + mlist.get(position).getNombre()+ "\n"
@@ -431,10 +351,8 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
                             appleSnapshot.getRef().removeValue();
-
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -442,14 +360,10 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
                 });
             }
         });
-        //recyclerView.getAdapter().notifyDataSetChanged();
 
     }
 
     private void checkearSharedPreference() {
-        //SharedPreferences.Editor editorClear = getSharedPreferences("shared", MODE_PRIVATE).edit();
-        // editorClear.clear();
-        //editorClear.apply();
         SharedPreferences prefs = getSharedPreferences("shared", MODE_PRIVATE);
         if(!prefs.contains("key")){
             key = FirebaseDatabase.getInstance().getReference("Paises").push().getKey();
@@ -462,75 +376,19 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
         }
     }
 
-    private void getValues() {
-        spinner_buscar_paises = findViewById(R.id.buscar_paises_spinner);
-        casosActivosTxt = findViewById(R.id.casosActivosText);
-        casosConfirmadosTxt = findViewById(R.id.casosConfirmadosText);
-        casosMuertesTxt = findViewById(R.id.casosMuertesText);
-        nuevosCasosTxt = findViewById(R.id.nuevosCasosText);
-        nuevasMuertesTxt = findViewById(R.id.nuevasMuertesText);
-        pais= findViewById(R.id.pais);
-        //card_location = findViewById(R.id.card_location);
-        card = findViewById(R.id.card);
+    private void initializeUI() {
         card.setBackgroundResource(R.drawable.card_location);
-        //card_location.setBackgroundResource(R.drawable.card_infocovid_design);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
-
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 
 
     private void getCountries(){
-
-        Cache cache = new Cache(getCacheDir(), cacheSize);
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .cache(cache)
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public okhttp3.Response intercept(Interceptor.Chain chain)
-                            throws IOException {
-                        okhttp3.Request request = chain.request();
-                        if (!isNetworkAvailable()) {
-                            int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale \
-                            request = request
-                                    .newBuilder()
-                                    .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                                    .build();
-                        }
-                        return chain.proceed(request);
-                    }
-                })
-                .build();
-
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.covid19api.com/")
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        CovidApi recipeService = retrofit.create(CovidApi.class);
-        Call<LinkedList<Countries>> callCountries = recipeService.getCountries();
+        Call<LinkedList<Countries>> callCountries = recipeServiceCovid19Api.getCountries();
         callCountries.enqueue(new Callback<LinkedList<Countries>>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<LinkedList<Countries>> call, Response<LinkedList<Countries>> response) {
 
-                showAlertDialogOnResponse();
                 setearSpinner(response);
                 spinner_buscar_paises.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -543,8 +401,8 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
                             }
                         }
 
-                        showAlertDialogOnResponse();
-                        Call<List<ByCountry>> callByCountry = recipeService.getByCountry
+
+                        Call<List<ByCountry>> callByCountry = recipeServiceCovid19Api.getByCountry
                                 ("https://api.covid19api.com/live/country/"+
                                         spinner_buscar_paises.getItemAtPosition(position)+"/"+"status"+"/"+"confirmed");
 
@@ -553,11 +411,10 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
                             @Override
                             public void onResponse(Call<List<ByCountry>> call, Response<List<ByCountry>> response) {
                                 if(response.isSuccessful()){
-                                    System.out.println("The response is successful");
                                     if(response.body().size() > 0 ){
                                         setearTextosCardViewPaises(response);
 
-                                        Call<Summary> callSummary= recipeService.getSummary("https://api.covid19api.com/summary");
+                                        Call<Summary> callSummary= recipeServiceCovid19Api.getSummary("https://api.covid19api.com/summary");
 
                                         callSummary.enqueue(new Callback<Summary>() {
                                             @Override
@@ -615,9 +472,6 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
 
                             }
                         });
-
-
-
                     }
 
                     @Override
@@ -637,14 +491,13 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
                 }
                 spinnerArray.sort(String::compareToIgnoreCase);
                 CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter(MainActivity.this, android.R.layout.simple_spinner_item, spinnerArray);
-                //ArrayAdapter<String> spinner_paises_adapter = new ArrayAdapter<String>(MainActivity.this,R.layout.paises_spinner_layout,R.id.textoSpinner,spinnerArray);
                 spinner_buscar_paises.setAdapter(customSpinnerAdapter);
                 progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<LinkedList<Countries>> call, Throwable t) {
-                System.out.println("El mensaje es " + " "  + t.getMessage());
+
             }
         });
 
@@ -654,8 +507,6 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
         if(checkInternetConnection()){
 
             almacenarValoresEnFirebase(key);
-        }else{
-            showAlertDialogFavoritos();
         }
 
     }

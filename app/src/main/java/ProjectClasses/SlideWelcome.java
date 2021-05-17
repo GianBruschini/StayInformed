@@ -1,4 +1,4 @@
-package Clases;
+package ProjectClasses;
 
 public class SlideWelcome {
 

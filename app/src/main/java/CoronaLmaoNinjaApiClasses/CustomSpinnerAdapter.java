@@ -1,4 +1,4 @@
-package Clases;
+package CoronaLmaoNinjaApiClasses;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -4,14 +4,12 @@ package Interfaces;
 import java.util.LinkedList;
 import java.util.List;
 
-import Clases.ByCountry;
-import Clases.Countries;
-import Clases.CountriesFlags;
-import Clases.Flag;
-import Clases.Summary;
+import covid19apiClasses.ByCountry;
+import covid19apiClasses.Countries;
+import CoronaLmaoNinjaApiClasses.CountriesFlags;
+import covid19apiClasses.Summary;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface CovidApi {

@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Adaptadores.SliderPagerAdapter;
-import Clases.SlideWelcome;
+import Adapters.SliderPagerAdapter;
+import ProjectClasses.SlideWelcome;
 
 public class WelcomeActivity extends AppCompatActivity {
 

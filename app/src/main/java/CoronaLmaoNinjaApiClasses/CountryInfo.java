@@ -1,4 +1,4 @@
-package Clases;
+package CoronaLmaoNinjaApiClasses;
 
 import com.google.gson.annotations.SerializedName;
 

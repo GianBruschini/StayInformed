@@ -1,9 +1,12 @@
-package Clases;
+package covid19apiClasses;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 import java.util.List;
+
+import covid19apiClasses.CountryActual;
+import covid19apiClasses.Global;
 
 public class Summary {
 

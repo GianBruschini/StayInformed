@@ -1,4 +1,4 @@
-package Adaptadores;
+package Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import com.gian.stayinformed.R;
 
 import java.util.List;
 
-import Clases.SlideWelcome;
+import ProjectClasses.SlideWelcome;
 
 
 public class SliderPagerAdapter extends PagerAdapter {

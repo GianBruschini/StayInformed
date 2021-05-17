@@ -1,4 +1,4 @@
-package Clases;
+package covid19apiClasses;
 
 public class Countries {
 

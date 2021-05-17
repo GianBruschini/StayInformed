@@ -1,8 +1,10 @@
-package Clases;
+package covid19apiClasses;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+
+import CoronaLmaoNinjaApiClasses.Premium;
 
 public class CountryActual {
 

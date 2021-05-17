@@ -1,6 +1,4 @@
-package Clases;
-
-import java.util.List;
+package CoronaLmaoNinjaApiClasses;
 
 public class Flag {
     String flag;

@@ -1,4 +1,4 @@
-package Adaptadores;
+package Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import Clases.PaisesFavoritosData;
+import ProjectClasses.PaisesFavoritosData;
 
 public class PaisesFavAdapter extends RecyclerView.Adapter<PaisesFavAdapter.PaisesFavViewHolder> {
     private Context context;

@@ -1,4 +1,4 @@
-package Clases;
+package CoronaLmaoNinjaApiClasses;
 
 public class Currency {
     public String code;
