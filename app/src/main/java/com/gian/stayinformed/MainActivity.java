@@ -380,8 +380,6 @@ public class MainActivity extends AppCompatActivity implements PaisesFavAdapter.
         card.setBackgroundResource(R.drawable.card_location);
     }
 
-
-
     private void getCountries(){
         Call<LinkedList<Countries>> callCountries = recipeServiceCovid19Api.getCountries();
         callCountries.enqueue(new Callback<LinkedList<Countries>>() {
