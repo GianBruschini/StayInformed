@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.gian.stayinformed.MainActivity;
 import com.gian.stayinformed.R;
 
 public class DisplayAlertDialog extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package CoronaLmaoNinjaApiClasses;
+package com.gian.stayinformed.model.coronaninjaapiclasses;
 
 public class Language {
     public String iso639_1;

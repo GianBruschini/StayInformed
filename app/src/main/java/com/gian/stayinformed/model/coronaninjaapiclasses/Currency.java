@@ -1,4 +1,4 @@
-package CoronaLmaoNinjaApiClasses;
+package com.gian.stayinformed.model.coronaninjaapiclasses;
 
 public class Currency {
     public String code;

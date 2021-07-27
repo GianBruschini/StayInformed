@@ -1,10 +1,11 @@
-package covid19apiClasses;
+package com.gian.stayinformed.model;
 
+import com.gian.stayinformed.model.coronaninjaapiclasses.Premium;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-import CoronaLmaoNinjaApiClasses.Premium;
+
 
 public class CountryActual {
 

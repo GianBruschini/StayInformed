@@ -1,4 +1,4 @@
-package covid19apiClasses;
+package com.gian.stayinformed.model;
 
 import com.google.gson.annotations.SerializedName;
 

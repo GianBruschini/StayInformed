@@ -5,9 +5,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,23 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StayInformed">
-        <activity android:name=".WelcomeActivity">
-        </activity>
-
-        <!-- prueba ca-app-pub-3940256099942544~3347511713 -->
-        <!-- original ca-app-pub-4185358034958198~5761614835 -->
-        <meta-data
-                android:name="com.google.android.gms.ads.APPLICATION_ID"
-                android:value="ca-app-pub-3940256099942544~3347511713"/>
-
-        <activity android:name=".MainActivity">
-
+        <activity android:name=".view.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- prueba ca-app-pub-3940256099942544~3347511713 -->
+        <!-- original ca-app-pub-4185358034958198~5761614835 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
     </application>
 
 </manifest>

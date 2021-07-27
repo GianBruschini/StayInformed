@@ -11,11 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gian.stayinformed.R;
+import com.gian.stayinformed.model.PaisesFavoritosData;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import ProjectClasses.PaisesFavoritosData;
 
 public class PaisesFavAdapter extends RecyclerView.Adapter<PaisesFavAdapter.PaisesFavViewHolder> {
     private Context context;

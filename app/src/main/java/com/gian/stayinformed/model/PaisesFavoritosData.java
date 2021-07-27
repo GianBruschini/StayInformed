@@ -1,4 +1,4 @@
-package ProjectClasses;
+package com.gian.stayinformed.model;
 
 public class PaisesFavoritosData {
 
@@ -10,11 +10,11 @@ public class PaisesFavoritosData {
     private String nuevosCasos;
     private String flag;
 
-    public PaisesFavoritosData (){
+    public PaisesFavoritosData(){
 
     }
 
-    public PaisesFavoritosData(String casosActivos, String casosConfirmados, String muertes, String nombre, String nuevasMuertes, String nuevosCasos,String flag) {
+    public PaisesFavoritosData(String casosActivos, String casosConfirmados, String muertes, String nombre, String nuevasMuertes, String nuevosCasos, String flag) {
         this.casosActivos = casosActivos;
         this.casosConfirmados = casosConfirmados;
         this.muertes = muertes;

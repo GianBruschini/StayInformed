@@ -1,13 +1,15 @@
-package Interfaces;
+package com.gian.stayinformed.interfaces;
 
+
+import com.gian.stayinformed.model.ByCountry;
+import com.gian.stayinformed.model.Countries;
+import com.gian.stayinformed.model.Summary;
+import com.gian.stayinformed.model.coronaninjaapiclasses.CountriesFlags;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import covid19apiClasses.ByCountry;
-import covid19apiClasses.Countries;
-import CoronaLmaoNinjaApiClasses.CountriesFlags;
-import covid19apiClasses.Summary;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Url;

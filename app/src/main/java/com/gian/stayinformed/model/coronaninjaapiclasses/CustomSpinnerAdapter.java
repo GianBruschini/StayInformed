@@ -1,4 +1,4 @@
-package CoronaLmaoNinjaApiClasses;
+package com.gian.stayinformed.model.coronaninjaapiclasses;
 
 import android.content.Context;
 import android.view.LayoutInflater;

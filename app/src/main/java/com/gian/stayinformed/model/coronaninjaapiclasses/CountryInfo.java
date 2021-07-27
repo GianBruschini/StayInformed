@@ -1,4 +1,4 @@
-package CoronaLmaoNinjaApiClasses;
+package com.gian.stayinformed.model.coronaninjaapiclasses;
 
 import com.google.gson.annotations.SerializedName;
 
