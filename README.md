@@ -4,6 +4,8 @@ Stay informed is an application where the user can check out information about c
 # App features
 
 * Android studio 4.1.1.
+* Retrofit and Gson used
+* MVP pattern
 * Gradle version 6.5.
 * API: https://corona.lmao.ninja
 * API: https://covid19api.com/
