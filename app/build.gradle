@@ -64,17 +64,10 @@ dependencies {
     //Volley, Picasso
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    // okhttp
-    def okHttpVersion = "4.9.0"
-    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
     // anuncios
     implementation 'com.google.android.gms:play-services-ads:20.0.0'
     //multidex
     implementation 'androidx.multidex:multidex:2.0.1'
-    //Butterknife
-    implementation 'com.jakewharton:butterknife:10.2.3'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
     //Lottie
     def lottieVersion = "3.7.2"
     implementation "com.airbnb.android:lottie:$lottieVersion"

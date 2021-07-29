@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".view.HomeActivity"
 
     >
 
@@ -85,7 +85,6 @@
                     />
                 <ImageView
                     android:id="@+id/agregarAfavoritos"
-                    android:onClick="agregarAfavoritos"
                     android:src="@drawable/ic_baseline_star_24"
                     android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
@@ -95,7 +94,6 @@
 
                 <TextView
                     android:id="@+id/image_share"
-                    android:onClick="compartirEnRedes"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="10dp"
@@ -104,11 +102,6 @@
 
 
             </LinearLayout>
-
-
-
-
-
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card"
@@ -122,6 +115,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
                     >
 
                     <LinearLayout

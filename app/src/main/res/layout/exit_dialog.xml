@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="230dp"
+        android:layout_height="170dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="30dp"
+        app:cardBackgroundColor="#009688"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/textQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_marginTop="60dp"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:text="You don't have Internet connection, please turn on to continue">
+
+            </TextView>
+            <ImageView
+                android:id="@+id/exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cancel"
+                android:layout_below="@id/textQuestion"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                >
+
+            </ImageView>
+
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</LinearLayout>

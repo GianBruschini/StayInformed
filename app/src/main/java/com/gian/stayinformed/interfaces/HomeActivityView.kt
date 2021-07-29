@@ -16,6 +16,10 @@ interface HomeActivityView {
     fun notifyCountryAddedFav()
     fun notifyCountryExistFav()
     fun shareCountryData(myIntent: Intent)
+    fun showInterstatialAd()
+    fun setDismisshShareTo0()
+    fun showDialogNotInternetConnection()
+
 
 
 }

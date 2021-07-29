@@ -52,6 +52,18 @@ class HomeActivityPresenter(var homeActivityView: HomeActivityView,
         homeActivityView.shareCountryData(myIntent)
     }
 
+    override fun onShowInterstatial() {
+        homeActivityView.showInterstatialAd()
+    }
+
+    override fun onSetDismissShareTo0() {
+        homeActivityView.setDismisshShareTo0()
+    }
+
+    override fun onNotInternetConnection() {
+        homeActivityView.showDialogNotInternetConnection()
+    }
+
     fun getCountryClickedInfo(country: String) {
         homeActivityInteractor.getInfoAbout(country)
     }
@@ -86,6 +98,16 @@ class HomeActivityPresenter(var homeActivityView: HomeActivityView,
         homeActivityInteractor.shareCountryOnSocialMedia(country,actives,confirmed,
                 death,newDeath,newCases)
 
+    }
+
+    fun checkIfShareDismiss(dismissShare: Int,country:String,
+                            confirmed: String,
+                            active: String,
+                            death: String,
+                            newCases: String,
+                            newDeath: String) {
+        homeActivityInteractor.checkIfShareDismiss(dismissShare,country,
+                confirmed,active,death,newCases,newDeath)
     }
 
 

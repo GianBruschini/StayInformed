@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".view.HomeActivity"
 
     >
 
@@ -129,9 +129,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginLeft="80dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="50dp"
-                        >
+                        android:layout_marginStart="20dp">
 
                         <TextView
                             android:id="@+id/casosConfirmadosText"
@@ -139,7 +139,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_light"
                             android:textColor="#000"
-                            android:textSize="22sp"
+                            android:textSize="18sp"
                             android:text="125157">
 
                         </TextView>
@@ -168,7 +168,7 @@
                             android:id="@+id/casosActivosText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="22sp"
+                            android:textSize="18sp"
                             android:fontFamily="@font/montserrat_light"
                             android:textColor="#000"
                             android:text="31651">
@@ -200,7 +200,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="31651"
-                            android:textSize="22sp"
+                            android:textSize="18sp"
                             android:fontFamily="@font/montserrat_light"
                             android:textColor="#000">
 
@@ -236,7 +236,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="31651"
-                                android:textSize="22sp"
+                                android:textSize="18sp"
                                 android:fontFamily="@font/montserrat_light"
                                 android:textColor="#000">
 
@@ -265,7 +265,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="31651"
-                                android:textSize="24sp"
+                                android:textSize="18sp"
                                 android:fontFamily="@font/montserrat_light"
                                 android:textColor="#000">
 

@@ -16,7 +16,6 @@ object  CommonUtils {
             it.setContentView(R.layout.progress_dialog_animated)
             it.setCancelable(false)
             it.setCanceledOnTouchOutside(false)
-
             return it
 
         }

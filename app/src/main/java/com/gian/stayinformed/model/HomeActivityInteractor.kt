@@ -4,9 +4,12 @@ import Adapters.PaisesFavAdapter
 import ProjectClasses.Covid19ApiSingleton
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,15 +18,20 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.gian.stayinformed.view.HomeActivity
-import com.google.firebase.database.*
-
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import org.json.JSONArray
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
+import kotlin.properties.Delegates
+
 
 class HomeActivityInteractor {
     private val recipeServiceCovid19Api = Covid19ApiSingleton.getService()
@@ -34,6 +42,7 @@ class HomeActivityInteractor {
     private val mlist: MutableList<PaisesFavoritosData> = mutableListOf()
     private lateinit var recyclerView:RecyclerView
     private var adapter: PaisesFavAdapter? = null
+    private var clicks by Delegates.notNull<Int>()
 
     interface onHomeActivityListener{
             fun onShowProgressDialog()
@@ -45,60 +54,78 @@ class HomeActivityInteractor {
             fun onCountryExistFav()
             fun onCountryAddedToFav()
             fun onShareCountryData(myIntent: Intent)
+            fun onShowInterstatial()
+            fun onSetDismissShareTo0()
+            fun onNotInternetConnection()
+
+
 
 
     }
 
     fun fillCountriesSpinner(listener: onHomeActivityListener) {
-        this.listener = listener
-        listener.onShowProgressDialog()
-        val callCountries = recipeServiceCovid19Api.countries
-        callCountries.enqueue(object : Callback<LinkedList<Countries>> {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            override fun onResponse(call: Call<LinkedList<Countries>>, response: Response<LinkedList<Countries>>) {
-                setearSpinner(response)
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            private fun setearSpinner(response: Response<LinkedList<Countries>>) {
-                val spinnerArrayListCountries: MutableList<String> = ArrayList()
-                for (i in response.body()!!.indices) {
-                    spinnerArrayListCountries.add(response.body()!![i].country)
+        if(isNetwork()){
+            clicks = 0
+            this.listener = listener
+            listener.onShowProgressDialog()
+            val callCountries = recipeServiceCovid19Api.countries
+            callCountries.enqueue(object : Callback<LinkedList<Countries>> {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                override fun onResponse(call: Call<LinkedList<Countries>>, response: Response<LinkedList<Countries>>) {
+                    setearSpinner(response)
                 }
-                spinnerArrayListCountries.sortWith(Comparator { obj: String, s: String? -> obj.compareTo(s!!, ignoreCase = true) })
-                listener.onSetSpinnerListCountries(spinnerArrayListCountries)
 
-            }
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                private fun setearSpinner(response: Response<LinkedList<Countries>>) {
+                    val spinnerArrayListCountries: MutableList<String> = ArrayList()
+                    for (i in response.body()!!.indices) {
+                        spinnerArrayListCountries.add(response.body()!![i].country)
+                    }
+                    spinnerArrayListCountries.sortWith(Comparator { obj: String, s: String? -> obj.compareTo(s!!, ignoreCase = true) })
+                    listener.onSetSpinnerListCountries(spinnerArrayListCountries)
 
-            override fun onFailure(call: Call<LinkedList<Countries>>, t: Throwable) {
-                listener.onFailureResponse()
-            }
-        })
+                }
+
+                override fun onFailure(call: Call<LinkedList<Countries>>, t: Throwable) {
+                    listener.onFailureResponse()
+                }
+            })
+
+
+        }else{
+            listener.onNotInternetConnection()
+        }
+
 
     }
 
     fun getInfoAbout(country: String) {
-        val callByCountry = recipeServiceCovid19Api.getByCountry("https://api.covid19api.com/live/country/" +
-                country + "/" + "status" + "/" + "confirmed")
+            val callByCountry = recipeServiceCovid19Api.getByCountry("https://api.covid19api.com/live/country/" +
+                    country + "/" + "status" + "/" + "confirmed")
 
-        callByCountry.enqueue(object : Callback<List<ByCountry?>?> {
-            @SuppressLint("SetTextI18n")
-            override fun onResponse(call: Call<List<ByCountry?>?>, response: Response<List<ByCountry?>?>) {
-                if (response.isSuccessful) {
-                    if (response.body()!!.isNotEmpty()) {
-                        var countrySelected: ByCountry? = ByCountry()
-                        countrySelected = response.body()!![response.body()!!.size - 1]
-                        listener.onPassCountryData(countrySelected)
-                    } else {
-                        listener.onPassCountryData(null)
+            callByCountry.enqueue(object : Callback<List<ByCountry?>?> {
+                @SuppressLint("SetTextI18n")
+                override fun onResponse(call: Call<List<ByCountry?>?>, response: Response<List<ByCountry?>?>) {
+                    if (response.isSuccessful) {
+                        clicks++;
+                        if (clicks == 4) {
+                            listener.onShowInterstatial()
+                            clicks = 0;
+                        }
+                        if (response.body()!!.isNotEmpty()) {
+                            var countrySelected: ByCountry? = ByCountry()
+                            countrySelected = response.body()!![response.body()!!.size - 1]
+                            listener.onPassCountryData(countrySelected)
+                        } else {
+                            listener.onPassCountryData(null)
+                        }
                     }
                 }
-            }
 
-            override fun onFailure(call: Call<List<ByCountry?>?>, t: Throwable) {
+                override fun onFailure(call: Call<List<ByCountry?>?>, t: Throwable) {
 
-            }
-        })
+                }
+            })
 
     }
 
@@ -288,5 +315,37 @@ class HomeActivityInteractor {
         context.startActivity(Intent.createChooser(myIntent, "Share"))
     }
 
+    fun checkIfShareDismiss(dismissShare: Int, country: String,
+                            confirmed: String, active: String,
+                            death: String, newCases: String, newDeath: String) {
+        if (dismissShare === 1) {
+            Log.d("TAG", "The ad was dismissed.")
+            val myIntent = Intent(Intent.ACTION_SEND)
+            myIntent.type = "text/plain"
+            val shareBody = """
+                        Country: ${country}
+                        Confirmed: ${confirmed}
+                        Active: ${active}
+                        Deaths: ${death}
+                        New cases: ${newCases}
+                        New deaths: ${newDeath}
+                        """.trimIndent()
+            myIntent.putExtra(Intent.EXTRA_SUBJECT, country)
+            myIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+            context.startActivity(Intent.createChooser(myIntent, "Share"))
+            listener.onSetDismissShareTo0()
+        }
+    }
 
+    fun isNetwork(): Boolean {
+        val connectivityManager = context?.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        // In here we return true if network is not null and Network is connected
+         if(networkInfo != null && networkInfo.isConnected) {
+             return true
+        }
+        return false
+
+
+    }
 }
