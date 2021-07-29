@@ -18,5 +18,7 @@ Stay informed is an application where the user can check out information about c
 * Picasso.
 
 # Google Play Store
-You can find this app here: https://play.google.com/store/apps/details?id=com.gian.stayinformed
+https://play.google.com/store/apps/details?id=com.gian.stayinformed
+
+
 <img src="https://user-images.githubusercontent.com/59579790/117869553-4f838500-b271-11eb-84d5-458730d6529e.png" width="200" height="400" />
